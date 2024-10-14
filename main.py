@@ -1,28 +1,6 @@
-# Databricks notebook source
-# MAGIC %md
-# MAGIC
-# MAGIC # Purpose
-# MAGIC Automate creation of (medium) quality documentation on usages of a data source which can be refined by seres humanos.
-# MAGIC
-# MAGIC ## Be...
-# MAGIC - Open minded about what constitues "peer reviewed research". Do not overly focus on academic research. If knowledgable industry experts are commenting on it, that's equivalent!
-# MAGIC - Careful not to incorporate demagogic arguments, masquerading as research 
-# MAGIC
-# MAGIC ## Functions
-# MAGIC For each data source...
-# MAGIC - Get most cited usages (academic publishing)
-# MAGIC - Get comprehensive usages (academic publishing)
-# MAGIC - Get high impression research (industry "periodicals", LinkedIn top voices, X Boneheads)
-# MAGIC - Get inferred industry usages (search the web to determine companies that are likely to be using the data privately, if they aren't already)
-# MAGIC
-# MAGIC ### GPT'ing
-# MAGIC https://chatgpt.com/share/1736b6f3-9f8d-41cc-94b4-7efc0cdb5392
-# MAGIC
-
-# COMMAND ----------
-
 from abc import ABC, abstractmethod
 import requests
+from bs4 import BeautifulSoup
 
 class CitationSleuth(ABC):
     """
@@ -82,11 +60,6 @@ class CitationSleuth(ABC):
         pass
 
 
-# COMMAND ----------
-
-from abc import ABC, abstractmethod
-import requests
-from bs4 import BeautifulSoup
 
 class PubMedCitationSleuth(CitationSleuth):
     """
@@ -206,11 +179,9 @@ class PubMedCitationSleuth(CitationSleuth):
 # markdown = sleuth.format_top_usages_as_markdown(results)
 # sleuth.update_object_docs("Machine Learning Dataset", markdown)
 
-
-# COMMAND ----------
-
-sleuth = PubMedCitationSleuth()
-results = sleuth.search_for_usages("medical expenditure panel survey (MEPS)")
-markdown = sleuth.format_top_usages_as_markdown(results)
-print(markdown)
-# sleuth.update_object_docs("Machine Learning Dataset", markdown)
+if __name__ == "__main__":
+    sleuth = PubMedCitationSleuth()
+    results = sleuth.search_for_usages("medical expenditure panel survey (MEPS)")
+    markdown = sleuth.format_top_usages_as_markdown(results)
+    print(markdown)
+    # sleuth.update_object_docs("Machine Learning Dataset", markdown)
